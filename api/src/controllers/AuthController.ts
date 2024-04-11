@@ -1,10 +1,43 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import User from '../models/User';
+const crypto = require('crypto');
+
+const generateJwtSecret = () => {
+    return crypto.randomBytes(64).toString('hex');
+};
+
+console.log(generateJwtSecret());
 
 class AuthController {
-  async login(req: Request, res: Response) {
+  async signup(req: Request, res: Response) {
+    const { username, email, password } = req.body;
+  
+    try {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      const newUser = new User({ username, email, password: hashedPassword });
+      await newUser.save();
+  
+      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET || '', {
+        expiresIn: '1h',
+      });
+  
+      res.status(201).json({ message: 'User registered successfully', token });
+    } catch (error) {
+      console.error('Error registering user:', error);
+      res.status(500).json({ message: 'Error registering user' });
+    }
+  }
+  
+
+  async signin(req: Request, res: Response) {
     const { email, password } = req.body;
 
     try {
@@ -24,7 +57,8 @@ class AuthController {
 
       res.status(200).json({ user, token });
     } catch (error) {
-      res.status(500).json({ message: 'Error logging in user' });
+      console.error('Error registering user:', error); // Afficher l'erreur dans la console
+      res.status(500).json({ message: 'Error registering user', error }); // Envoyer l'erreur dans la réponse
     }
   }
 
