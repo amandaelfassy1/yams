@@ -29,14 +29,6 @@ export default class Login extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    const currentUser = AuthService.getCurrentUser();
-
-    if (currentUser) {
-      this.setState({ redirect: "/profile" });
-    };
-  }
-
   componentWillUnmount() {
     window.location.reload();
   }
@@ -55,42 +47,18 @@ export default class Login extends Component<Props, State> {
       message: "",
       loading: true
     });
-    // AuthService.signin(email, password).then(
-    //   () => {
-    //     console.log("heyyyy");
-        
-    //     this.setState({
-    //       redirect: "/home"
-    //     });
-    //   },
-    //   error => {
-    //     const resMessage =
-    //       (error.response &&
-    //         error.response.data &&
-    //         error.response.data.message) ||
-    //       error.message ||
-    //       error.toString();
-
-    //     this.setState({
-    //       loading: false,
-    //       message: resMessage
-    //     });
-    //   }
-    // );
+   
     AuthService.signin(email, password)
   .then(response => {
     console.log(response);
-
     localStorage.setItem("token", response.token)
   })
   .finally(()=>{
-       // Gérer la réponse réussie ici
        this.setState({
         redirect: "/home"
       });
   })
   .catch(error => {
-    // Gérer les erreurs ici
     const resMessage =
       (error.response &&
         error.response.data &&
@@ -119,7 +87,7 @@ export default class Login extends Component<Props, State> {
     };
 
     return (
-      <div className="col-md-12">
+      <div className="col-md-12 bg">
         <div className="card card-container">
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -144,7 +112,7 @@ export default class Login extends Component<Props, State> {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Mot de passe</label>
                 <Field name="password" type="password" className="form-control" />
                 <ErrorMessage
                   name="password"
@@ -176,3 +144,5 @@ export default class Login extends Component<Props, State> {
     );
   }
 }
+
+

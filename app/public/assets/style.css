@@ -1,6 +1,7 @@
 .dice-game-container {
     text-align: center;
     margin-top: 20px;
+    margin: 100px auto;
   }
   
   .dice-container {
@@ -8,25 +9,77 @@
   }
   
   .dice-image {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     margin-right: 10px;
+    border-radius: 10px;
   }
   
   .message {
     font-size: 18px;
     font-weight: bold;
-    color: green;
+    color: rgb(245, 26, 161);
     margin-top: 20px;
+    padding: 10px;
+    background-color: white;
   }
   
   .winning-details {
-    margin-top: 20px;
+    padding: 20px 0px;
+    background-color: white;
   }
   
   .winning-details img {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
     margin-right: 10px;
+  }
+  button{
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: white;
+    border: 0px;
+  }
+  button:hover{
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: rgb(255, 0, 221);
+    border: 0px;
+  }
+  h1{
+    font-weight: bold;
+  }
+
+.results-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .results-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .winner-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .winner-name {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .winner-details {
+    margin-top: 10px;
+  }
+  
+  .winner-text {
+    font-size: 14px;
   }
   

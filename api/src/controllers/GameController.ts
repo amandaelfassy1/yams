@@ -35,8 +35,8 @@ export const playGame = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Utilisateur introuvable' });
   }
 
-  if (user.nb_game >=3) {
-    return res.status(400).json({ message: 'Trop de tentatives' });
+  if (user.nb_game > 3) {
+    return res.status(200).json({ message: 'Trop de tentatives' });
   }
 
   if (user.wins.length>0) {
