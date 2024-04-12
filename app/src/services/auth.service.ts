@@ -10,8 +10,9 @@ class AuthService {
         password
       })
       .then(response => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
+        if (response.data) {
+          console.log(response.data);
+          // localStorage.setItem("user", JSON.stringify(response.data));
         }
 
         return response.data;
@@ -38,4 +39,4 @@ class AuthService {
   }
 }
 
-export default new AuthService();
+export default new  AuthService();

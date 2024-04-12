@@ -55,27 +55,55 @@ export default class Login extends Component<Props, State> {
       message: "",
       loading: true
     });
+    // AuthService.signin(email, password).then(
+    //   () => {
+    //     console.log("heyyyy");
+        
+    //     this.setState({
+    //       redirect: "/home"
+    //     });
+    //   },
+    //   error => {
+    //     const resMessage =
+    //       (error.response &&
+    //         error.response.data &&
+    //         error.response.data.message) ||
+    //       error.message ||
+    //       error.toString();
 
-    AuthService.signin(email, password).then(
-      () => {
-        this.setState({
-          redirect: "/profile"
-        });
-      },
-      error => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
+    //     this.setState({
+    //       loading: false,
+    //       message: resMessage
+    //     });
+    //   }
+    // );
+    AuthService.signin(email, password)
+  .then(response => {
+    console.log(response);
 
-        this.setState({
-          loading: false,
-          message: resMessage
-        });
-      }
-    );
+    localStorage.setItem("token", response.token)
+  })
+  .finally(()=>{
+       // Gérer la réponse réussie ici
+       this.setState({
+        redirect: "/home"
+      });
+  })
+  .catch(error => {
+    // Gérer les erreurs ici
+    const resMessage =
+      (error.response &&
+        error.response.data &&
+        error.response.data.message) ||
+      error.message ||
+      error.toString();
+
+    this.setState({
+      loading: false,
+      message: resMessage
+    });
+  });
+
   }
 
   render() {

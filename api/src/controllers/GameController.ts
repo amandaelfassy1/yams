@@ -3,10 +3,10 @@ import User, { IUser } from '../models/User';
 import Pastry from '../models/Pastries';
 
 function rollDice(): number[] {
-  const dice = [1,2,1,2,1];
-  // for (let i = 0; i < 5; i++) {
-  //   dice.push(Math.floor(Math.random() * 6) + 1); 
-  // }
+  const dice = [];
+  for (let i = 0; i < 5; i++) {
+    dice.push(Math.floor(Math.random() * 6) + 1); 
+  }
   return dice;
 }
 
@@ -35,7 +35,7 @@ export const playGame = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Utilisateur introuvable' });
   }
 
-  if (user.nb_game >= 3) {
+  if (user.nb_game >=3) {
     return res.status(400).json({ message: 'Trop de tentatives' });
   }
 
