@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import IWin from '../types/win.types';
 
 const DiceGame: React.FC = () => {
   const [dice, setDice] = useState<number[]>([]);
   const [message, setMessage] = useState<string>('');
+  const [wins, setWin] = useState<IWin[]>([])
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -19,6 +21,11 @@ const DiceGame: React.FC = () => {
       });
       setDice(response.data.dice); // Mettre à jour les dés avec les valeurs récupérées
       setMessage(response.data.message);
+      if(response.data.message == "felicitations"){
+        console.log(response.data.data)
+        setWin(response.data.data.wins)
+      }
+      console.log(response.data)
     } catch (error) {
       console.error('Error rolling dice:', error);
     }
@@ -35,6 +42,15 @@ const DiceGame: React.FC = () => {
         </div>
       </div>
       {message && <p>{message}</p>}
+      {wins.length > 0 && wins.map((win, i)=> {
+        return (
+          <>
+            <p>{win.name}</p>
+            <img key={i} src={`/public/img/${win.image}`}/>
+          </>
+        );
+      }
+      )}
     </div>
   );
 };

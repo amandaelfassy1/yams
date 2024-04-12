@@ -40,7 +40,7 @@ export const playGame = async (req: Request, res: Response) => {
   }
 
   if (user.wins.length>0) {
-    return res.status(400).json({ message: 'L\'utilisateur a deja gagné' });
+    return res.status(200).json({ message: 'L\'utilisateur a deja gagné' });
   }
   const dice = rollDice();
   const data = await checkWinningCombination(user,dice);
