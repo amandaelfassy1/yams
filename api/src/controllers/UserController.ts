@@ -21,7 +21,7 @@ class UserController {
     }
   }
 
-  async login(req: Request, res: Response) {
+  async signin(req: Request, res: Response) {
     const { email, password } = req.body;
 
     try {

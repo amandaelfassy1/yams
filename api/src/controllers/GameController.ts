@@ -1,0 +1,111 @@
+import { Request, Response } from 'express';
+import User, { IUser } from '../models/User';
+import Pastry from '../models/Pastries';
+
+function rollDice(): number[] {
+  const dice = [1,2,1,2,1];
+  // for (let i = 0; i < 5; i++) {
+  //   dice.push(Math.floor(Math.random() * 6) + 1); 
+  // }
+  return dice;
+}
+
+async function checkWinningCombination(user:IUser, dice: number[]): Promise<{}|any> {
+  let data;
+
+  if (detectFull(dice)) {
+    data = await attribuatePastries(user, 'YAMS', 3)
+  } else if (detectForOfFive(dice)) {
+    data = await attribuatePastries(user, 'CARRE', 2)
+  } else if (detectTwoPairs(dice)) {
+    data = await attribuatePastries(user, 'DOUBLE', 1)
+  }else{
+    user.nb_game++
+    await user.save()
+  }
+
+  return data;
+}
+
+export const playGame = async (req: Request, res: Response) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(400).json({ message: 'Utilisateur introuvable' });
+  }
+
+  if (user.nb_game >= 3) {
+    return res.status(400).json({ message: 'Trop de tentatives' });
+  }
+
+  if (user.wins.length>0) {
+    return res.status(400).json({ message: 'L\'utilisateur a deja gagné' });
+  }
+  const dice = rollDice();
+  const data = await checkWinningCombination(user,dice);
+  if(!data){
+    res.status(200).json({message:"Relancer", dice})
+  }else{
+    res.status(200).json({message:"felicitations", data, dice });
+  }
+
+  
+};
+
+async function attribuatePastries(user: any, type:string, quantity:number): Promise<{}> {
+  try {
+    const pastries = await Pastry.aggregate([{$match:{stock:{$gt:0}}},{ $sample: { size: quantity } }]); 
+
+    for (const pastry of pastries) {
+      user.wins.push({
+        name: pastry.name,
+        image: pastry.image,
+        date: new Date(),
+      });
+
+      await Pastry.findByIdAndUpdate(pastry._id, { $inc: { stock: -1, quantityWon:1 } }); 
+    }
+
+    user.nb_game++; 
+    await user.save();
+    const data = {
+      id:user._id,
+      email:user.email,
+      username: user.username,
+      wins:user.wins,
+      type:type
+    }
+    return data
+  } catch (error) {
+    console.error('Erreur lors de l\'attribution des pâtisseries:', error);
+    throw new Error('Erreur lors de l\'attribution des pâtisseries');
+  }
+}
+
+
+const detectFull = (dice: number[]): boolean => {
+  return dice.every((val: number) => val === dice[0]);
+}
+
+const detectForOfFive = (dice: number[]): boolean => {
+  const identicalValues = dice.filter((val) => val === dice[0]);
+  return identicalValues.length === 4;
+}
+
+const detectTwoPairs = (dice: number[]): boolean => {
+  const occurrences: { [key: number]: number } = {};
+  
+  for (const die of dice) {
+    occurrences[die] = (occurrences[die] || 0) + 1;
+  }
+  
+  let pairCount = 0;
+  for (const die in occurrences) {
+    if (occurrences[die] >= 2) {
+      pairCount++;
+    }
+  }
+  
+  return pairCount >= 2;
+}

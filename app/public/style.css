@@ -1,0 +1,63 @@
+/* Ajoutez les styles pour les dés et l'animation ici */
+.dice-container {
+  display: flex;
+}
+
+.die {
+  width: 80px;
+  height: 80px;
+  margin: 0 10px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  background-color: #fff;
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+/* Ajoutez les styles pour afficher les points des dés */
+.d1::before {
+  content: '';
+}
+
+.d2::before {
+  content: '';
+}
+
+.d3::before {
+  content: '';
+}
+
+.d4::before {
+  content: '';
+}
+
+.d5::before {
+  content: '';
+}
+
+.d6::before {
+  content: '';
+}
+
+.rolling {
+  animation: roll 2s infinite;
+}
+
+@keyframes roll {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

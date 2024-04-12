@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './src/routes/userRoutes';
 import authRoutes from './src/routes/authRoutes';
+import gameRoutes from './src/routes/gamesRoutes';
+
 import cors from 'cors';
 import crypto from 'crypto';
 
@@ -30,6 +32,7 @@ app.listen(PORT, () => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/game', gameRoutes);
 
 mongoose.connect('mongodb://mongo/yummy_yams')
   .then(() => {
