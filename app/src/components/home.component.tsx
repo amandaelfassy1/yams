@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import IWin from '../types/win.types';
+import '../../public/assets/style.css';
 
 const DiceGame: React.FC = () => {
   const [dice, setDice] = useState<number[]>([]);
@@ -31,28 +32,29 @@ const DiceGame: React.FC = () => {
     }
   };
 
-  return (
-    <div>
-      <h1>Dice game</h1>
-      <button onClick={rollDice}>Roll Dice</button>
-      <div>
-        <h2>Dice:</h2>
-        <div>
-          {dice && dice.map((value, index) => <DiceImage key={index} value={value}/>)}
+    return (
+      <div className="dice-game-container">
+        <h1>Dice game</h1>
+        <button onClick={rollDice}>Roll Dice</button>
+        <div className="dice-container">
+          <h2>Dice:</h2>
+          <div>
+            {dice && dice.map((value, index) => <DiceImage key={index} value={value}/>)}
+          </div>
         </div>
+        {message && <p className="message">{message}</p>}
+        {wins.length > 0 && (
+          <div className="winning-details">
+            {wins.map((win, i)=> (
+              <div key={i}>
+                <p>{win.name}</p>
+                <img src={`/public/img/${win.image}`} alt={win.name} className="winning-image" />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      {message && <p>{message}</p>}
-      {wins.length > 0 && wins.map((win, i)=> {
-        return (
-          <>
-            <p>{win.name}</p>
-            <img key={i} src={`/public/img/${win.image}`}/>
-          </>
-        );
-      }
-      )}
-    </div>
-  );
+    );
 };
 
 const DiceImage: React.FC<{ value: number }> = ({ value }) => {
