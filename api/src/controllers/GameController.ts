@@ -35,13 +35,19 @@ export const playGame = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Utilisateur introuvable' });
   }
 
-  if (user.nb_game > 3) {
+  if (user.nb_game > 2) {
     return res.status(200).json({ message: 'Trop de tentatives' });
   }
 
+  const pastryStockZero = await Pastry.find({ stock: { $gt: 0 } }).countDocuments() === 0;
+  if (pastryStockZero) {
+    return res.status(200).json({ message: 'Toutes les pâtisseries sont épuisées. Le jeu est terminé.' });
+  }
+  
   if (user.wins.length>0) {
     return res.status(200).json({ message: 'L\'utilisateur a deja gagné' });
   }
+
   const dice = rollDice();
   const data = await checkWinningCombination(user,dice);
   if(!data){
