@@ -10,7 +10,6 @@ import IUser from './types/user.type';
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
-import Profile from "./components/profile.component";
 import Winner from "./components/result.component";
 
 type Props = {};
@@ -32,19 +31,6 @@ class App extends Component<Props, State> {
       currentUser: undefined,
     };
   }
-
-  componentDidMount() {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-      });
-    }
-
-  }
   
   logOut() {
     AuthService.logout();
@@ -59,13 +45,12 @@ class App extends Component<Props, State> {
 
     return (
       <div className="bg">
-        <div className="container mt-3">
+        <div className="mt-3">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="/winners" element={<Winner />} />
           </Routes>
         </div>

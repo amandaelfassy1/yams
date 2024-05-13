@@ -103,7 +103,7 @@ export default class Register extends Component<Props, State> {
 
     return (
       <div className="col-md-12">
-        <div className="card card-container">
+      <div className="form-content mt-5 p-5">
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
             alt="profile-img"

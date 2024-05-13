@@ -53,7 +53,7 @@ export const playGame = async (req: Request, res: Response) => {
   if(!data){
     res.status(200).json({message:"Relancer", dice})
   }else{
-    res.status(200).json({message:"felicitations", data, dice });
+    res.status(200).json({message:"felicitations", data, dice, user });
   }
 
   

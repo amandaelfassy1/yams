@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import IWin from '../types/win.types';
 import '../../public/assets/style.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector} from 'react-redux';
+import { clearUser, setUser } from '../reducers/store';
 
 const DiceGame: React.FC = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [dice, setDice] = useState<number[]>([]);
   const [message, setMessage] = useState<string>('');
-  const [wins, setWin] = useState<IWin[]>([])
   const token = localStorage.getItem('token');
-  const [showButton, setShowButton] = useState<boolean>(false); // État pour afficher le bouton
-
+  const [showButton, setShowButton] = useState<boolean>(false); 
+  const user = useSelector((state: RootState)=> state.user)
+  console.log(user.wins);
+  
+  
   useEffect(() => {
-    setDice([1, 2, 1, 2, 1]); // Mettre à jour les dés avec une valeur par défaut seulement au montage du composant
+    setDice([1, 2, 1, 2, 1]); 
   }, []); 
 
   const rollDice = async () => {
@@ -22,11 +27,12 @@ const DiceGame: React.FC = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-      setDice(response.data.dice); // Mettre à jour les dés avec les valeurs récupérées
+      console.log(response.data)
+      setDice(response.data.dice); 
       setMessage(response.data.message);
+      dispatch(setUser(response.data.user))
       if(response.data.message == "felicitations"){
         console.log(response.data.data)
-        setWin(response.data.data.wins)
       }
       if(response.data.message == "Toutes les pâtisseries sont épuisées. Le jeu est terminé."){
         setShowButton(true)
@@ -36,11 +42,18 @@ const DiceGame: React.FC = () => {
       console.error('Error rolling dice:', error);
     }
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    dispatch(clearUser())
+    navigate("/login");
+  };
     return (
       <div className="dice-game-container">
         <h1>Yummy Yams !</h1>
-        <button onClick={rollDice}>Lancer les dés</button>
+        <button onClick={handleLogout}>Déconnexion</button>
+        {user.wins.length == 0 &&  (
+          <button onClick={rollDice}>Lancer les dés</button>
+        )}
         <div className="dice-container">
           <div>
             {dice && dice.map((value, index) => <DiceImage key={index} value={value}/>)}
@@ -48,9 +61,9 @@ const DiceGame: React.FC = () => {
         </div>
         {message && <p className="message">{message}</p>}
         {showButton && <Link to="/winners" className="btn btn-primary">Voir le tableau des scores</Link>} {/* Afficher le bouton uniquement si showButton est vrai */}
-        {wins.length > 0 && (
+        {user.wins.length > 0 && (
           <div className="winning-details">
-            {wins.map((win, i)=> (
+            {user.wins.map((win, i)=> (
               <div key={i}>
                 <p>{win.name}</p>
                 <img src={`/public/img/${win.image}`} alt={win.name} className="winning-image" />
