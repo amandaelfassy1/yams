@@ -8,7 +8,7 @@ interface UserState {
   password: string;
   nb_game: number;
   wins: string[];
-token?: string
+  token?: string
 }
 
 const initialState: UserState = {

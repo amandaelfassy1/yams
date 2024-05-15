@@ -17,7 +17,7 @@ class AuthController {
     try {
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: 'Email already exists' });
+        return res.status(400).json({ message: 'Email existe déjà' });
       }
   
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,7 +29,7 @@ class AuthController {
         expiresIn: '1h',
       });
   
-      res.status(201).json({ message: 'User registered successfully', token });
+      res.status(201).json({ message: 'Inscription réalisée avec succés', token });
     } catch (error) {
       console.error('Error registering user:', error);
       res.status(500).json({ message: 'Error registering user' });
@@ -46,7 +46,7 @@ class AuthController {
       console.log(user);
       
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User non trouvé' });
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
