@@ -2,8 +2,11 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../models/User';
+
+//Importation du module crypto pour la génération de la clé secrète JWT.
 const crypto = require('crypto');
 
+//Définition de la fonction generateJwtSecret qui génère une clé secrète JWT aléatoire en utilisant le module crypto.
 const generateJwtSecret = () => {
     return crypto.randomBytes(64).toString('hex');
 };

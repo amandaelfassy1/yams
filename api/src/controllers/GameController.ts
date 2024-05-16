@@ -29,7 +29,8 @@ async function checkWinningCombination(user:IUser, dice: number[]): Promise<{}|a
   return data;
 }
 //Endpoint playGame : C'est la fonction principale de l'API pour jouer au jeu. 
-//Elle prend en compte les requêtes HTTP entrantes, vérifie les conditions d'erreur, génère les dés, vérifie les combinaisons gagnantes et attribue les pâtisseries en conséquence.
+//Elle prend en compte les requêtes HTTP entrantes, vérifie les conditions d'erreur, génère les dés, 
+//vérifie les combinaisons gagnantes et attribue les pâtisseries en conséquence.
 //Elle renvoie également les messages appropriés et les données associées.
 export const playGame = async (req: Request, res: Response) => {
   const { userId } = req.body;
@@ -40,7 +41,7 @@ export const playGame = async (req: Request, res: Response) => {
   if (user.nb_game > 2) {
     return res.status(200).json({ message: 'Trop de tentatives' });
   }
-
+  
   const pastryStockZero = await Pastry.find({ stock: { $gt: 0 } }).countDocuments() === 0;
   if (pastryStockZero) {
     return res.status(200).json({ message: 'Toutes les pâtisseries sont épuisées. Le jeu est terminé.' });

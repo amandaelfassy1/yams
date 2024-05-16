@@ -64,6 +64,7 @@ const DiceGame: React.FC = () => {
     return (
       <div className="dice-game-container">
         <h1>Yummy Yams !</h1>
+        <h6 className='m-4'>Vous avez 3 tentatives</h6>
         {user.wins.length == 0 &&  (
           <button onClick={rollDice}>Lancer les dés</button>
         )}
